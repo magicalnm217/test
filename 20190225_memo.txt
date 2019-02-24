@@ -1,0 +1,49 @@
+＜powershell＞
+$post = @{"cont1"=1; "cont2"=2;} | ConvertTo-Json
+Invoke-WebRequest -uri http://localhost:3001/predict -Method POST -ContentType application/json -Body $post
+
+＜python＞
+from flask import Flask, make_response, jsonify, request
+import json
+
+api = Flask(__name__)
+
+# GETの実装
+@api.route('/predict', methods=['POST'])
+def predict():
+    json_in = json.loads(request.data)
+    cont1 = json_in.get('cont1')
+    cont2 = json_in.get('cont2')
+#    json_ret = { 'cont3' : cont1,
+#                 'cont4' : cont2}
+    json_ret = {'cont3' : cont1+cont2}
+    return make_response(jsonify(json_ret))
+
+
+＜hachidori＞
+タイトル(必須)
+URL(必須)
+：JSONを返却するAPIのURLを指定します。
+
+テストURL
+：リクエストの一例を入力することでレスポンスを解析します。
+
+APIモード(必須)
+：HTTPメソッドの種類を指定します。
+
+
+リクエストボディ
+：リクエストボディをJSON形式で指定します。
+
+{}
+リクエストヘッダ
+：リクエストヘッダをJSON形式で指定します。
+
+{}
+
+
+＜参考資料＞
+https://qiita.com/mserizawa/items/7f1b9e5077fd3a9d336b
+https://qiita.com/zaki-lknr/items/8950f6acea20961a8afc
+https://qiita.com/paperlefthand/items/82ab6df4a348f6070a55
+
